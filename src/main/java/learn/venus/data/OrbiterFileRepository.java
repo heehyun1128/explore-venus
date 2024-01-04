@@ -3,10 +3,7 @@ package learn.venus.data;
 import learn.venus.models.Orbiter;
 import learn.venus.models.OrbiterType;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +14,7 @@ public class OrbiterFileRepository {
         this.filePath=filePath;
     }
 
-    public List<Orbiter> findAll(){
+    public List<Orbiter> findAll() throws DataAccessException {
         ArrayList<Orbiter> result=new ArrayList<>();
 
         try(BufferedReader reader=new BufferedReader(new FileReader(filePath))){
@@ -35,13 +32,15 @@ public class OrbiterFileRepository {
                     result.add(orbiter);
                 }
             }
+        }catch(FileNotFoundException ex){
+//            okay to ignore
         }catch(IOException ex){
-//do nothing?
+            throw new DataAccessException(ex.getMessage(),ex);
         }
         return result;
     }
 
-    public Orbiter findById(int orbiterId){
+    public Orbiter findById(int orbiterId) throws DataAccessException {
         for(Orbiter orbiter: findAll()){
             if(orbiter.getOrbiterId()==orbiterId){
                 return orbiter;
@@ -50,7 +49,7 @@ public class OrbiterFileRepository {
         return null;
     }
 
-    public List<Orbiter> findByType(OrbiterType type){
+    public List<Orbiter> findByType(OrbiterType type) throws DataAccessException {
         ArrayList<Orbiter> res=new ArrayList<>();
         for(Orbiter orbiter:findAll()){
             if(orbiter.getType()==type){
@@ -76,11 +75,27 @@ public class OrbiterFileRepository {
         return orbiter;
     }
 
-    public boolean update(Orbiter orbiter){
+    public boolean update(Orbiter orbiter) throws DataAccessException {
+        List<Orbiter> all=findAll();
+        for(int i=0;i<all.size();i++){
+            if(all.get(i).getOrbiterId()==orbiter.getOrbiterId()){
+                all.set(i,orbiter);
+                writeAll(all);
+                return true;
+            }
+        }
         return false;
     }
 
-    public boolean deleteById(int orbiterId){
+    public boolean deleteById(int orbiterId) throws DataAccessException {
+        List<Orbiter> all=findAll();
+        for(int i=0;i<all.size();i++){
+            if(all.get(i).getOrbiterId()==orbiterId){
+                all.remove(i);
+                writeAll(all);
+                return true;
+            }
+        }
         return false;
     }
 

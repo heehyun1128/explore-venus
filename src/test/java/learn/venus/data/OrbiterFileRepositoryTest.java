@@ -1,17 +1,31 @@
 package learn.venus.data;
 import learn.venus.models.Orbiter;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 
 import learn.venus.models.OrbiterType;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class OrbiterFileRepositoryTest  {
-    private OrbiterFileRepository repository=new OrbiterFileRepository("./data/orbiters.csv");
+
+    private static final String SEED_PATH="./data/orbiters-seed.csv";
+    private static final String TEST_PATH="./data/orbiters-test.csv";
+    private OrbiterFileRepository repository=new OrbiterFileRepository(TEST_PATH);
+
+    @BeforeEach
+    void setup() throws IOException {
+        Files.copy(Paths.get(SEED_PATH), Paths.get(TEST_PATH), StandardCopyOption.REPLACE_EXISTING);
+    }
 
     @Test
-    void shouldFindFiveOrbiters(){
+    void shouldFindFiveOrbiters() throws DataAccessException {
         List<Orbiter> actual = repository.findAll();
         assertNotNull(actual);
 
@@ -19,20 +33,20 @@ class OrbiterFileRepositoryTest  {
     }
 
     @Test
-    void shouldFindExistingOrbiter(){
+    void shouldFindExistingOrbiter() throws DataAccessException {
         Orbiter celestyn = repository.findById(4);
         assertNotNull(celestyn);
         assertEquals("Celestyn Kamien",celestyn.getName());
     }
 
     @Test
-    void shouldNotFindExistingOrbiter(){
+    void shouldNotFindMissingOrbiter() throws DataAccessException {
         Orbiter notFound=repository.findById(1000);
         assertNull(notFound);
     }
 
     @Test
-    void shouldFindOneEachType(){
+    void shouldFindOneEachType() throws DataAccessException {
         List<Orbiter> modules=repository.findByType(OrbiterType.MODULE);
         assertNotNull(modules);
         assertEquals(1,modules.size());
@@ -65,5 +79,46 @@ class OrbiterFileRepositoryTest  {
 
         assertNotNull(actual);
         assertEquals(6,actual.getOrbiterId());
+    }
+
+    @Test
+    void shouldUpdateExisting() throws DataAccessException{
+        Orbiter orbiter=new Orbiter();
+        orbiter.setOrbiterId(3);
+        orbiter.setName("Test shuttle");
+        orbiter.setType(OrbiterType.SHUTTLE);
+        orbiter.setSponsor("Test Sponsor");
+
+        boolean success=repository.update(orbiter);
+        assertTrue(success);
+
+        Orbiter actual=repository.findById(3);
+        assertNotNull(actual);
+        assertEquals("Test shuttle",actual.getName());
+        assertEquals("Test Sponsor",actual.getSponsor());
+    }
+
+    @Test
+    void shouldNotUpdateMissing() throws DataAccessException{
+        Orbiter orbiter=new Orbiter();
+        orbiter.setOrbiterId(1000);
+
+        boolean actual=repository.update(orbiter);
+        assertFalse(actual);
+    }
+
+    @Test
+    void shouldDeleteExisting() throws DataAccessException{
+        boolean actual=repository.deleteById(2);
+        assertTrue(actual);
+
+        Orbiter o=repository.findById(2);
+        assertNull(o);
+    }
+
+    @Test
+    void shouldNotDeleteMissing() throws DataAccessException{
+        boolean actual=repository.deleteById(10000);
+        assertFalse(actual);
     }
 }
