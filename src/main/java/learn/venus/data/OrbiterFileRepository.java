@@ -40,5 +40,35 @@ public class OrbiterFileRepository {
         return result;
     }
 
+    public Orbiter findById(int orbiterId){
+        for(Orbiter orbiter: findAll()){
+            if(orbiter.getOrbiterId()==orbiterId){
+                return orbiter;
+            }
+        }
+        return null;
+    }
 
+    public List<Orbiter> findByType(OrbiterType type){
+        ArrayList<Orbiter> res=new ArrayList<>();
+        for(Orbiter orbiter:findAll()){
+            if(orbiter.getType()==type){
+                res.add(orbiter);
+            }
+        }
+        return res;
+    }
+
+//    add
+    public Orbiter add(Orbiter orbiter){
+        return null;
+    }
+
+    public boolean update(Orbiter orbiter){
+        return false;
+    }
+
+    public boolean deleteById(int orbiterId){
+        return false;
+    }
 }
