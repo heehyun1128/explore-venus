@@ -7,13 +7,14 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrbiterFileRepository {
+public class OrbiterFileRepository implements OrbiterRepository {
     private final String filePath;
 
     public OrbiterFileRepository(String filePath){
         this.filePath=filePath;
     }
 
+    @Override
     public List<Orbiter> findAll() throws DataAccessException {
         ArrayList<Orbiter> result=new ArrayList<>();
 
@@ -40,6 +41,7 @@ public class OrbiterFileRepository {
         return result;
     }
 
+    @Override
     public Orbiter findById(int orbiterId) throws DataAccessException {
         for(Orbiter orbiter: findAll()){
             if(orbiter.getOrbiterId()==orbiterId){
@@ -49,6 +51,7 @@ public class OrbiterFileRepository {
         return null;
     }
 
+    @Override
     public List<Orbiter> findByType(OrbiterType type) throws DataAccessException {
         ArrayList<Orbiter> res=new ArrayList<>();
         for(Orbiter orbiter:findAll()){
@@ -60,6 +63,7 @@ public class OrbiterFileRepository {
     }
 
 //    add
+    @Override
     public Orbiter add(Orbiter orbiter) throws DataAccessException {
         List<Orbiter> allOrbiters=findAll();
         int nextId=0;
@@ -75,6 +79,7 @@ public class OrbiterFileRepository {
         return orbiter;
     }
 
+    @Override
     public boolean update(Orbiter orbiter) throws DataAccessException {
         List<Orbiter> all=findAll();
         for(int i=0;i<all.size();i++){
@@ -87,6 +92,7 @@ public class OrbiterFileRepository {
         return false;
     }
 
+    @Override
     public boolean deleteById(int orbiterId) throws DataAccessException {
         List<Orbiter> all=findAll();
         for(int i=0;i<all.size();i++){

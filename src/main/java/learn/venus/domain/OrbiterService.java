@@ -1,8 +1,15 @@
 package learn.venus.domain;
 
+import learn.venus.data.OrbiterRepository;
 import learn.venus.models.Orbiter;
 
 public class OrbiterService {
+
+    private final OrbiterRepository repository;
+
+    public OrbiterService(OrbiterRepository repository){
+        this.repository=repository;
+    }
 //    add
 //    cant be null; name required; modules can hold 4 astronaut
 //    module with docker==4 astronaut, 1 shuttle
