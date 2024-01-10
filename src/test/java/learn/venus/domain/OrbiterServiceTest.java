@@ -41,4 +41,10 @@ class OrbiterServiceTest {
         assertFalse(result.isSuccess());
     }
 
+    @Test
+    void shoudAddShuttle() throws DataAccessException{
+        service.add(new Orbiter(0, "Test Dock", OrbiterType.MODULE_WITH_DOCK,null));
+        OrbiterResult result = service.add(new Orbiter(0, "Test Shuttle", OrbiterType.SHUTTLE,null));
+        assertTrue(result.isSuccess());
+    }
 }
