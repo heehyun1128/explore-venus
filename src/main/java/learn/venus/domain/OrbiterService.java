@@ -16,7 +16,7 @@ public class OrbiterService {
     }
 //    add
 //    cant be null; name required; modules can hold 4 astronaut
-//    module with docker==4 astronaut, 1 shuttle
+//    module with docker==2 astronaut, 1 shuttle
 
     public OrbiterResult add(Orbiter orbiter) throws DataAccessException {
         OrbiterResult result=validateInputs(orbiter);

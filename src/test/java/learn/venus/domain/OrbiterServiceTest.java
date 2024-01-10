@@ -35,4 +35,10 @@ class OrbiterServiceTest {
         assertNotNull(result.getPayload());
     }
 
+    @Test
+    void shoudNotAddShuttleWithNoRoom() throws DataAccessException{
+        OrbiterResult result = service.add(new Orbiter(0, "Test Shuttle", OrbiterType.SHUTTLE,null));
+        assertFalse(result.isSuccess());
+    }
+
 }
