@@ -59,4 +59,10 @@ class OrbiterServiceTest {
         OrbiterResult result=service.update(new Orbiter(3,"Updated Astro",OrbiterType.VENUSIAN,null));
         assertFalse(result.isSuccess());
     }
+
+    @Test
+    void shouldNotUpdateEmptyName() throws DataAccessException{
+        OrbiterResult result=service.update(new Orbiter(3," ",OrbiterType.ASTRONAUT,null));
+        assertFalse(result.isSuccess());
+    }
 }
