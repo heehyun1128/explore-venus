@@ -27,4 +27,12 @@ class OrbiterServiceTest {
         assertFalse(result.isSuccess());
     }
 
+    @Test
+    void shoudAddAstro() throws DataAccessException{
+        service.add(new Orbiter(0, "Test Mod", OrbiterType.MODULE,null));
+        OrbiterResult result = service.add(new Orbiter(0, "Test Astro", OrbiterType.ASTRONAUT,null));
+        assertTrue(result.isSuccess());
+        assertNotNull(result.getPayload());
+    }
+
 }
