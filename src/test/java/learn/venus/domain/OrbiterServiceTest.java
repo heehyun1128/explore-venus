@@ -47,4 +47,16 @@ class OrbiterServiceTest {
         OrbiterResult result = service.add(new Orbiter(0, "Test Shuttle", OrbiterType.SHUTTLE,null));
         assertTrue(result.isSuccess());
     }
+
+    @Test
+    void shouldUpdate() throws DataAccessException{
+        OrbiterResult result=service.update(new Orbiter(3,"Updated Astro",OrbiterType.ASTRONAUT,null));
+        assertFalse(result.isSuccess());
+    }
+
+    @Test
+    void shouldNotUpdateType() throws DataAccessException{
+        OrbiterResult result=service.update(new Orbiter(3,"Updated Astro",OrbiterType.VENUSIAN,null));
+        assertFalse(result.isSuccess());
+    }
 }
