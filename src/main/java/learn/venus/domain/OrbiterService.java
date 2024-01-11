@@ -5,7 +5,9 @@ import learn.venus.data.OrbiterRepository;
 import learn.venus.models.Orbiter;
 import learn.venus.models.OrbiterType;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class OrbiterService {
 
@@ -22,7 +24,9 @@ public class OrbiterService {
             return result;
         }
 
-        result = validateDomain(orbiter);
+        Map<OrbiterType,Integer> counts = countTypes();
+        counts.put(orbiter.getType(),counts.get(orbiter.getType())+1);
+        result = validateDomain(counts);
         if(!result.isSuccess()){
             return result;
         }
@@ -56,6 +60,47 @@ public class OrbiterService {
 
         return result;
     }
+
+    public OrbiterResult deleteById(int orbiterId) throws DataAccessException{
+        return null;
+    }
+
+    private Map<OrbiterType,Integer> countTypes(){
+        HashMap<OrbiterType,Integer> counts = new HashMap<>();
+        counts.put(OrbiterType.MODULE,0);
+        counts.put(OrbiterType.MODULE_WITH_DOCK,0);
+        counts.put(OrbiterType.ASTRONAUT,0);
+        counts.put(OrbiterType.SHUTTLE,0);
+        counts.put(OrbiterType.VENUSIAN,0);
+
+        try{
+            List<Orbiter> allOrbiters = repository.findAll();
+            for(Orbiter o:allOrbiters){
+                switch (o.getType()){
+                    case MODULE:
+                        counts.put(OrbiterType.MODULE, counts.get(OrbiterType.MODULE)+1);
+                        break;
+                    case MODULE_WITH_DOCK:
+                        counts.put(OrbiterType.MODULE, counts.get(OrbiterType.MODULE_WITH_DOCK)+1);
+                        break;
+                    case ASTRONAUT:
+                        counts.put(OrbiterType.MODULE, counts.get(OrbiterType.ASTRONAUT)+1);
+                        break;
+                    case SHUTTLE:
+                        counts.put(OrbiterType.MODULE, counts.get(OrbiterType.SHUTTLE)+1);
+                        break;
+                    case VENUSIAN:
+                        counts.put(OrbiterType.MODULE, counts.get(OrbiterType.VENUSIAN)+1);
+                        break;
+                }
+            }
+        }catch(DataAccessException ex){
+
+        }
+        return counts;
+
+    }
+
     private OrbiterResult validateInputs(Orbiter orbiter){
         OrbiterResult result=new OrbiterResult();
         if(orbiter==null){
@@ -69,44 +114,22 @@ public class OrbiterService {
         return result;
     }
 
-    private OrbiterResult validateDomain(Orbiter orbiter) throws DataAccessException {
+    private OrbiterResult validateDomain(Map<OrbiterType,Integer> counts) {
+        int astroCount=counts.get(OrbiterType.ASTRONAUT);
+        int shuttleCount=counts.get(OrbiterType.SHUTTLE);
+        int modCount=counts.get(OrbiterType.MODULE);
+        int dockCount=counts.get(OrbiterType.MODULE_WITH_DOCK);
+
+
         OrbiterResult result = new OrbiterResult();
-        List<Orbiter> allOrbiters=repository.findAll();
 
-        if(orbiter.getType()==OrbiterType.ASTRONAUT || orbiter.getType()==OrbiterType.SHUTTLE){
-            int astroCount=0;
-            int shuttleCount=0;
-            int modCount=0;
-            int dockCount=0;
-
-            for(Orbiter o:allOrbiters){
-                switch(o.getType()){
-                    case MODULE:
-                        modCount++;
-                        break;
-                    case MODULE_WITH_DOCK:
-                        dockCount++;
-                        break;
-                    case ASTRONAUT:
-                        astroCount++;
-                        break;
-                    case SHUTTLE:
-                        shuttleCount++;
-                        break;
-                }
-            }
-            if(orbiter.getType()==OrbiterType.ASTRONAUT){
-                if(astroCount+1>modCount*4 + dockCount*2){
+        if(astroCount>modCount*4 + dockCount*2){
                     result.addErrorMessage("No room for an astronaut.");
                 }
-            }
 
-            if(orbiter.getType()==OrbiterType.SHUTTLE){
-                if(astroCount+1>dockCount){
+        if(astroCount>dockCount){
                     result.addErrorMessage("No room for an astronaut.");
                 }
-            }
-        }
 
         return result;
     }
