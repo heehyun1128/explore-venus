@@ -62,6 +62,24 @@ public class OrbiterService {
     }
 
     public OrbiterResult deleteById(int orbiterId) throws DataAccessException{
+        OrbiterResult result=new OrbiterResult();
+        Orbiter orbiter=repository.findById(orbiterId);
+        if(orbiter==null){
+            result.addErrorMessage("Could not find Orbiter ID "+orbiter);
+            return result;
+        }
+        Map<OrbiterType,Integer> counts = countTypes();
+        counts.put(orbiter.getType(), counts.get(orbiter.getType())-1);
+
+        result=validateDomain(counts);
+        if(!result.isSuccess()){
+            return result;
+        }
+
+        boolean success=repository.deleteById(orbiterId);
+        if(!success){
+            result.addErrorMessage("Could not find Orbiter ID "+orbiter);
+        }
         return null;
     }
 

@@ -22,13 +22,13 @@ class OrbiterServiceTest {
     }
 
     @Test
-    void shoudNotAddAstroWithNoRoom() throws DataAccessException{
+    void shouldNotAddAstroWithNoRoom() throws DataAccessException{
         OrbiterResult result = service.add(new Orbiter(0, "Test Astro", OrbiterType.ASTRONAUT,null));
         assertFalse(result.isSuccess());
     }
 
     @Test
-    void shoudAddAstro() throws DataAccessException{
+    void shouldAddAstro() throws DataAccessException{
         service.add(new Orbiter(0, "Test Mod", OrbiterType.MODULE,null));
         OrbiterResult result = service.add(new Orbiter(0, "Test Astro", OrbiterType.ASTRONAUT,null));
         assertTrue(result.isSuccess());
@@ -36,7 +36,7 @@ class OrbiterServiceTest {
     }
 
     @Test
-    void shoudNotAddShuttleWithNoRoom() throws DataAccessException{
+    void shouldNotAddShuttleWithNoRoom() throws DataAccessException{
         OrbiterResult result = service.add(new Orbiter(0, "Test Shuttle", OrbiterType.SHUTTLE,null));
         assertFalse(result.isSuccess());
     }
@@ -63,6 +63,18 @@ class OrbiterServiceTest {
     @Test
     void shouldNotUpdateEmptyName() throws DataAccessException{
         OrbiterResult result=service.update(new Orbiter(3," ",OrbiterType.ASTRONAUT,null));
+        assertFalse(result.isSuccess());
+    }
+
+    @Test
+    void shouldDelete() throws DataAccessException{
+        OrbiterResult result= service.deleteById(3);
+        assertTrue(result.isSuccess());
+    }
+
+    @Test
+    void shouldNotDeleteDock() throws DataAccessException{
+        OrbiterResult result= service.deleteById(1);
         assertFalse(result.isSuccess());
     }
 }
