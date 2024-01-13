@@ -6,6 +6,8 @@ import learn.venus.models.Orbiter;
 import learn.venus.models.OrbiterType;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class OrbiterServiceTest {
@@ -13,6 +15,13 @@ class OrbiterServiceTest {
     @Test
     void shouldAddOrbiter(){
 
+    }
+
+    @Test
+    void shouldFindByType() throws DataAccessException{
+        List<Orbiter> astronauts=service.findByType(OrbiterType.ASTRONAUT);
+        assertNotNull(astronauts);
+        assertEquals(2,astronauts.size());
     }
 
     @Test
