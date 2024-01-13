@@ -36,6 +36,14 @@ public class View {
             }
         }
     }
+
+    public Orbiter makeOrbiter(){
+        Orbiter orbiter=new Orbiter();
+        orbiter.setName(readRequiredString("Name: "));
+        orbiter.setType(readOrbiterType());
+        orbiter.setSponsor(readString("Sponsor: "));
+        return orbiter;
+    }
     public OrbiterType readOrbiterType(){
         System.out.println("Types: ");
         OrbiterType[] values=OrbiterType.values();
