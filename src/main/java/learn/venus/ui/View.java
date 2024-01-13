@@ -3,6 +3,7 @@ package learn.venus.ui;
 import learn.venus.models.Orbiter;
 import learn.venus.models.OrbiterType;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class View {
@@ -15,7 +16,7 @@ public class View {
         for(int i=0;i<values.length;i++){
             System.out.printf("%s. %s%n",i,values[i].getTitle());
         }
-        int index=readInt("Select [0-4: ", 0, 4);
+        int index=readInt("Select [0-4]: ", 0, 4);
         return values[index];
     }
 
@@ -25,6 +26,16 @@ public class View {
         System.out.println("=".repeat(message.length()));
     }
 
+    public void displayOrbiters(List<Orbiter> orbiters){
+        printHeader("Orbiters:");
+        if(orbiters.size()==0){
+            System.out.println("No orbiters found.");
+        }else{
+            for(Orbiter o: orbiters){
+                System.out.printf("%s - %s, %s%n", o.getName(),o.getType(),o.getSponsor());
+            }
+        }
+    }
     public OrbiterType readOrbiterType(){
         System.out.println("Types: ");
         OrbiterType[] values=OrbiterType.values();

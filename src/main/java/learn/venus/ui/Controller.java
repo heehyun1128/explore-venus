@@ -18,7 +18,14 @@ public class Controller {
     }
 
 
-    private void runMenu(){
+    public void run(){
+        try{
+            runMenu();
+        }catch(DataAccessException ex){
+            view.printHeader("Fatal err: "+ex);
+        }
+    }
+    private void runMenu() throws DataAccessException {
         MenuOption option;
 
         do {
