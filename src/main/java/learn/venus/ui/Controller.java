@@ -13,6 +13,23 @@ public class Controller {
     }
 
     public void run(){
-        System.out.println("works");
+        MenuOption option;
+
+        do {
+            option=view.displayMenuAndSelect();
+            System.out.println(option.getTitle());
+            switch (option){
+                case EXIT:
+                    break;
+                case DISPLAY_ORBITERS:
+                    break;
+                case CREATE_ORBITERS:
+                    break;
+                case UPDATE_ORBITERS:
+                    break;
+                case DELETE_ORBITERS:
+                    break;
+            }
+        }while(option!=MenuOption.EXIT);
     }
 }
