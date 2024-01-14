@@ -58,9 +58,30 @@ public class View {
     }
 
     public Orbiter update(List<Orbiter> orbiters){
+        displayOrbiters(orbiters);
         if(orbiters.size()==0){
-
+            return null;
         }
+
+        int orbiterId = readInt("Orbiter Id: ");
+        for(Orbiter o:orbiters){
+            if(o.getOrbiterId()==orbiterId){
+                return update(o);
+            }
+        }
+        return null;
+    }
+
+    private Orbiter update(Orbiter orbiter){
+        String name=readString("Name ("+orbiter.getName()+"): ");
+        if(name.trim().length()>=0){
+            orbiter.setName(name);
+        }
+        String sponsor=readString("Sponsor (" + orbiter.getSponsor()+"): ");
+        if(sponsor.trim().length()>=0){
+            orbiter.setSponsor(sponsor);
+        }
+        return orbiter;
     }
 
     public OrbiterType readOrbiterType(){
