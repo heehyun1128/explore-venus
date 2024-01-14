@@ -1,5 +1,6 @@
 package learn.venus.ui;
 
+import learn.venus.domain.OrbiterResult;
 import learn.venus.models.Orbiter;
 import learn.venus.models.OrbiterType;
 
@@ -32,7 +33,18 @@ public class View {
             System.out.println("No orbiters found.");
         }else{
             for(Orbiter o: orbiters){
-                System.out.printf("%s - %s, %s%n", o.getName(),o.getType(),o.getSponsor());
+                System.out.printf("%s. %s:%s, %s%n", o.getOrbiterId(), o.getName(),o.getType(),o.getSponsor());
+            }
+        }
+    }
+
+    public void displayResult(OrbiterResult result){
+        if(result.isSuccess()){
+            printHeader("Success!");
+        }else{
+            printHeader("Err: ");
+            for(String err: result.getMessages()){
+                System.out.println(err);
             }
         }
     }
@@ -44,6 +56,13 @@ public class View {
         orbiter.setSponsor(readString("Sponsor: "));
         return orbiter;
     }
+
+    public Orbiter update(List<Orbiter> orbiters){
+        if(orbiters.size()==0){
+
+        }
+    }
+
     public OrbiterType readOrbiterType(){
         System.out.println("Types: ");
         OrbiterType[] values=OrbiterType.values();
