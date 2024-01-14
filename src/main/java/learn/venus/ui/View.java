@@ -60,9 +60,11 @@ public class View {
     public Orbiter update(List<Orbiter> orbiters){
 
         Orbiter orbiter=findOrbiter(orbiters);
+
         if(orbiter!=null){
             update(orbiter);
         }
+
         return orbiter;
     }
 
