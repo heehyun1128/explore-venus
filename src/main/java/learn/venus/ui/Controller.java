@@ -88,7 +88,8 @@ public class Controller {
         OrbiterType type = view.readOrbiterType();
         List<Orbiter> orbiters=service.findByType(type);
 
-        Orbiter orbiter=view.getOrbiterToDelete(orbiters);
+        Orbiter orbiter=view.findOrbiter(orbiters);
+
         if(orbiter==null){
             return;
         }
