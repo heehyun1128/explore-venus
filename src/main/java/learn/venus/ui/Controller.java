@@ -82,8 +82,19 @@ public class Controller {
         view.displayResult(result);
     }
 
-    private void deleteOrbiters() {
+    private void deleteOrbiters() throws DataAccessException {
         view.printHeader(MenuOption.DELETE_ORBITERS.getTitle());
+
+        OrbiterType type = view.readOrbiterType();
+        List<Orbiter> orbiters=service.findByType(type);
+
+        Orbiter orbiter=view.getOrbiterToDelete(orbiters);
+        if(orbiter==null){
+            return;
+        }
+
+        OrbiterResult result=service.deleteById(orbiter.getOrbiterId());
+        view.displayResult(result);
     }
 }
 
