@@ -45,6 +45,7 @@ public class OrbiterService {
         if(!result.isSuccess()){
             return result;
         }
+
 //        cannot update orbiter type
         Orbiter existing=repository.findById(orbiter.getOrbiterId());
         if(existing==null){
